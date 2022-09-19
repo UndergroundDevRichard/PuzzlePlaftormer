@@ -20,19 +20,30 @@ public:
 	
 private:
 
-	UPROPERTY(Category = MovingPlatform, EditAnywhere, AdvancedDisplay)
-	float DistanceTravelTick;
+	FVector GlobalStartLocation;
+	FVector GlobalTargetLocation;
 
-	UPROPERTY(Category = MovingPlatform, EditAnywhere, Meta=(MakeEditWidget = true), AdvancedDisplay)
-	FVector TargetLocation;
+	float MovementSpeed;
 
-	FVector MovementDirection;
+	bool bIsGoingToTarget;
+	FVector CurrentTarget;
+	virtual void CalculateDirection();
 
-	float timeToCompleteACircuit;
 	
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	UPROPERTY(Category = MovingPlatform, EditAnywhere, AdvancedDisplay)
+		float TimeToReachTarget;
+
+	UPROPERTY(Category = MovingPlatform, EditAnywhere, Meta = (MakeEditWidget = true), AdvancedDisplay)
+	FVector TargetLocation;
+
+	FVector MovementDirection;
 	
 	virtual void BeginPlay() override;
+
+	virtual void SetMovingPlatformMeshComponent();
+
 };
