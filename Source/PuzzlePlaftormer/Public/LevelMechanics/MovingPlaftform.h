@@ -22,6 +22,8 @@ private:
 
 	FVector GlobalStartLocation;
 	FVector GlobalTargetLocation;
+	UPROPERTY(EditAnywhere)
+	int ActiveTriggers = 0;
 
 	float MovementSpeed;
 
@@ -29,13 +31,15 @@ private:
 	FVector CurrentTarget;
 	virtual void CalculateDirection();
 
+	bool bActivePlatform;
+
 	
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	UPROPERTY(Category = MovingPlatform, EditAnywhere, AdvancedDisplay)
-		float TimeToReachTarget;
+		float TimeToReachTarget ;
 
 	UPROPERTY(Category = MovingPlatform, EditAnywhere, Meta = (MakeEditWidget = true), AdvancedDisplay)
 	FVector TargetLocation;
@@ -45,5 +49,8 @@ public:
 	virtual void BeginPlay() override;
 
 	virtual void SetMovingPlatformMeshComponent();
+
+	void AddActiveTrigger();
+	void RemoveActiveTrigger();
 
 };

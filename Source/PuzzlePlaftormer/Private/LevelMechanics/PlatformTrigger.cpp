@@ -5,6 +5,8 @@
 #include "Components/BoxComponent.h"
 #include "GameFramework/Actor.h"
 
+#include "MovingPlaftform.h"
+
 
 // Sets default values
 APlatformTrigger::APlatformTrigger()
@@ -17,13 +19,15 @@ APlatformTrigger::APlatformTrigger()
 	TriggerVolume->SetBoxExtent(BoxSize);
 	if (!ensure(TriggerVolume != nullptr)) return;
 	RootComponent = TriggerVolume;
+	TriggerVolume->OnComponentBeginOverlap.AddDynamic(this, &APlatformTrigger::OnOverlapBegin);
+	TriggerVolume->OnComponentEndOverlap.AddDynamic(this, &APlatformTrigger::OnOverlapEnd);
 
 	TriggerMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("TriggerMesh"));
 	TriggerMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	TriggerMesh->SetupAttachment(RootComponent);
 }
 
-// Called when the game starts or when spawned
+// Called when the game starts or when spawned 
 void APlatformTrigger::BeginPlay()
 {
 	Super::BeginPlay();
@@ -37,9 +41,50 @@ void APlatformTrigger::Tick(float DeltaTime)
 }
 
 
+//Changes properties in the construction script
 void APlatformTrigger::PostEditChangeProperty(struct FPropertyChangedEvent& e)
 {
+	if (TriggerAsset != nullptr)
+	{
+		TriggerMesh->SetStaticMesh(TriggerAsset);
+	}
 	TriggerVolume->SetBoxExtent(BoxSize);
 	Super::PostEditChangeProperty(e);
+}
+
+void APlatformTrigger::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if (Role == ROLE_Authority)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Acti vated"));
+		for (AMovingPlaftform* Platform : PlatformsToTrigger)
+		{
+			{
+				if (ensure(Platform != nullptr))
+				{
+					Platform->AddActiveTrigger();
+				}
+			}
+		}
+		
+	}
+}
+
+void APlatformTrigger::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	if (Role == ROLE_Authority)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("De Acti vated"));
+		for (AMovingPlaftform* Platform : PlatformsToTrigger)
+		{
+			{
+				if (ensure(Platform != nullptr))
+				{
+					Platform->RemoveActiveTrigger();
+				}
+			}
+		}
+
+	}
 }
 

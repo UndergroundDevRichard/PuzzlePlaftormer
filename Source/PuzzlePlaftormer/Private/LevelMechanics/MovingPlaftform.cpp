@@ -42,6 +42,23 @@ void AMovingPlaftform::SetMovingPlatformMeshComponent()
 
 }
 
+void AMovingPlaftform::AddActiveTrigger()
+{
+	if (Role == ROLE_Authority)
+	{ActiveTriggers++;}
+}
+
+void AMovingPlaftform::RemoveActiveTrigger()
+{
+	if (Role == ROLE_Authority)
+	{
+		if (ActiveTriggers > 0)
+		{
+			ActiveTriggers--; 
+		}
+	}
+}
+
 void AMovingPlaftform::CalculateDirection()
 {
 	if (bIsGoingToTarget) 
@@ -63,21 +80,23 @@ void AMovingPlaftform::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-
-	if (Role == ROLE_Authority)
+	if (ActiveTriggers > 0)
 	{
-		FVector Location = GetActorLocation();
-		Location += MovementSpeed * DeltaTime * MovementDirection;
-		SetActorLocation(Location);
-
-		FVector Delta = Location - CurrentTarget;
-		float DistanceToGoal = Delta.Size();
-
-		if (DistanceToGoal < 5)
+		if (Role == ROLE_Authority)
 		{
-			CalculateDirection();
+
+			FVector Location = GetActorLocation();
+			Location += MovementSpeed * DeltaTime * MovementDirection;
+			SetActorLocation(Location);
+
+			FVector Delta = Location - CurrentTarget;
+			float DistanceToGoal = Delta.Size();
+
+			if (DistanceToGoal < 5)
+			{
+				CalculateDirection();
+			}
 		}
-		
 	}
 }
 

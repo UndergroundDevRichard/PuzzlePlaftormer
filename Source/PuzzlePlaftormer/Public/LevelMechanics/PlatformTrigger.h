@@ -24,6 +24,9 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void PostEditChangeProperty(struct FPropertyChangedEvent& e) override;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "PlatformStats")
+	UStaticMesh* TriggerAsset;
 
 private:
 	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
@@ -33,4 +36,11 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "PlatformStats")
 	FVector BoxSize;
 
+	UPROPERTY(EditAnywhere)
+	TArray<class AMovingPlaftform*> PlatformsToTrigger;
+
+	UFUNCTION()
+	void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	UFUNCTION()
+	void OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 };
