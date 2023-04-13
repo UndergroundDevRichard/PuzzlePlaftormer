@@ -2,7 +2,7 @@
 
 #include "PuzzlePlatformerGameInstance.h"
 #include "Engine/Engine.h"
-
+#include "Kismet/GameplayStatics.h"
 
 UPuzzlePlatformerGameInstance::UPuzzlePlatformerGameInstance(const FObjectInitializer & ObjectInitializer)
 {
@@ -21,6 +21,12 @@ void UPuzzlePlatformerGameInstance::Host()
 	if (!ensure(Engine != nullptr)) return;
 
 	Engine->AddOnScreenDebugMessage(0, 2, FColor::Green, TEXT("Hosting"));
+
+	UWorld* World = GetWorld();
+	if (!ensure(World != nullptr)) return;
+
+	World->ServerTravel("/Game/Maps/L_Lobby?listen");
+
 }
 
 void UPuzzlePlatformerGameInstance::Join(const FString& IPAddress)
@@ -29,4 +35,11 @@ void UPuzzlePlatformerGameInstance::Join(const FString& IPAddress)
 	if (!ensure(Engine != nullptr)) return;
 
 	Engine->AddOnScreenDebugMessage(0, 5, FColor::Yellow, FString::Printf(TEXT("Joining : %s"), *IPAddress));
+
+	APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	if (!ensure(PC != nullptr)) return;
+	/*FString URL;
+	SessionInt->GetresolvedConnectString(Session)*/
+	PC->ClientTravel(IPAddress, TRAVEL_Absolute, true);
+
 }
