@@ -5,7 +5,7 @@
 #include "Components/BoxComponent.h"
 #include "GameFramework/Actor.h"
 
-#include "MovingPlaftform.h"
+#include "MovingPlatform.h"
 
 
 // Sets default values
@@ -57,7 +57,7 @@ void APlatformTrigger::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActo
 	if (Role == ROLE_Authority)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Acti vated"));
-		for (AMovingPlaftform* Platform : PlatformsToTrigger)
+		for (AMovingPlatform* Platform : PlatformsToTrigger)
 		{
 			{
 				if (ensure(Platform != nullptr))
@@ -75,7 +75,7 @@ void APlatformTrigger::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor*
 	if (Role == ROLE_Authority)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("De Acti vated"));
-		for (AMovingPlaftform* Platform : PlatformsToTrigger)
+		for (AMovingPlatform* Platform : PlatformsToTrigger)
 		{
 			{
 				if (ensure(Platform != nullptr))
