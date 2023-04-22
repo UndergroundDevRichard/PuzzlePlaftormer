@@ -4,6 +4,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "Components/BoxComponent.h"
 #include "GameFramework/Actor.h"
+#include "UObject/Object.h"
 
 #include "MovingPlatform.h"
 
@@ -41,16 +42,19 @@ void APlatformTrigger::Tick(float DeltaTime)
 }
 
 
+#if WITH_EDITOR
 //Changes properties in the construction script
 void APlatformTrigger::PostEditChangeProperty(struct FPropertyChangedEvent& e)
 {
+	Super::PostEditChangeProperty(e);
 	if (TriggerAsset != nullptr)
 	{
 		TriggerMesh->SetStaticMesh(TriggerAsset);
 	}
 	TriggerVolume->SetBoxExtent(BoxSize);
-	Super::PostEditChangeProperty(e);
+
 }
+#endif
 
 void APlatformTrigger::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {

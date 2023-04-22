@@ -38,8 +38,6 @@ void UPuzzlePlatformerGameInstance::Join(const FString& IPAddress)
 
 	APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 	if (!ensure(PC != nullptr)) return;
-	/*FString URL;
-	SessionInt->GetresolvedConnectString(Session)*/
 	PC->ClientTravel(IPAddress, TRAVEL_Absolute, true);
 
 }

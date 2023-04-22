@@ -23,8 +23,10 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+#if WITH_EDITOR
 	virtual void PostEditChangeProperty(struct FPropertyChangedEvent& e) override;
-	
+#endif
+
 	UPROPERTY(EditDefaultsOnly, Category = "PlatformStats")
 	UStaticMesh* TriggerAsset;
 
