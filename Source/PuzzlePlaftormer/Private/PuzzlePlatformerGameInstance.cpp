@@ -25,7 +25,7 @@ void UPuzzlePlatformerGameInstance::Host()
 	UWorld* World = GetWorld();
 	if (!ensure(World != nullptr)) return;
 
-	World->ServerTravel("/Game/Maps/L_Lobby?listen");
+	World->ServerTravel("/Game/Maps/L_BaseLevel?listen");
 
 }
 

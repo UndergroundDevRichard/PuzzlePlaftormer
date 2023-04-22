@@ -41,6 +41,9 @@ Windows.Engine:/Script/AndroidPlatformEditor.AndroidSDKSettings:ANTPath:0=(Path=
 Windows.Engine:/Script/AndroidPlatformEditor.AndroidSDKSettings:JavaPath:0=(Path="")
 Windows.Engine:/Script/AndroidPlatformEditor.AndroidSDKSettings:SDKAPILevel:0=latest
 Windows.Engine:/Script/AndroidPlatformEditor.AndroidSDKSettings:NDKAPILevel:0=android-19
+Windows.Engine:/Script/TcpMessaging.TcpMessagingSettings:ListenEndpoint:0=7777
+Windows.Engine:/Script/TcpMessaging.TcpMessagingSettings:EnableTransport:0=True
+Windows.Engine:/Script/TcpMessaging.TcpMessagingSettings:ConnectionRetryDelay:0=2
 Windows.Engine:URL:Protocol:0=unreal
 Windows.Engine:URL:Name:0=Player
 Windows.Engine:URL:SaveExt:0=usa
@@ -1237,9 +1240,6 @@ Windows.Engine:/Script/CinematicCamera.CineCameraComponent:DefaultLensFocalLengt
 Windows.Engine:/Script/CinematicCamera.CineCameraComponent:DefaultLensFStop:0=2.8
 Windows.Engine:OnlineSubsystemMcp.OnlineChatMcp:RestrictedPlatforms:0=PSN
 Windows.Engine:OnlineSubsystemMcp.OnlineChatMcp:RestrictedPlatforms:1=XBL
-Windows.Engine:/Script/TcpMessaging.TcpMessagingSettings:EnableTransport:0=True
-Windows.Engine:/Script/TcpMessaging.TcpMessagingSettings:ListenEndpoint:0=
-Windows.Engine:/Script/TcpMessaging.TcpMessagingSettings:ConnectionRetryDelay:0=2
 Windows.Engine:CrashReportClient:bHideLogFilesOption:0=false
 Windows.Engine:CrashReportClient:bIsAllowedToCloseWithoutSending:0=true
 Windows.Engine:CrashReportClient:CrashConfigPurgeDays:0=2
