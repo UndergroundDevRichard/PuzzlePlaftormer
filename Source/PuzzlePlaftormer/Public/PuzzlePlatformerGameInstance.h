@@ -17,7 +17,8 @@ class PUZZLEPLAFTORMER_API UPuzzlePlatformerGameInstance : public UGameInstance
 public:
 
 	UPuzzlePlatformerGameInstance(const FObjectInitializer & ObjectInitializer);
-	
+
+
 
 public:
 	UFUNCTION()
@@ -28,5 +29,11 @@ public:
 
 	UFUNCTION(exec)
 	void Join(const FString& IPAddress);
+
+private:
+	TSubclassOf<class UUserWidget> MenuClass;
+	//UPROPERTY()
+	//class UUserWidget* MenuWidget;
+	
 
 };
