@@ -2,12 +2,17 @@
 
 #include "PuzzlePlaftormerCharacter.h"
 #include "HeadMountedDisplayFunctionLibrary.h"
+#include "Kismet/GameplayStatics.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
+#include "Blueprint/UserWidget.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "UI/InGameMenu.h"
+#include "UObject/ConstructorHelpers.h"
+#include "PuzzlePlatformerGameInstance.h"
 
 //////////////////////////////////////////////////////////////////////////
 // APuzzlePlaftormerCharacter
@@ -45,6 +50,11 @@ APuzzlePlaftormerCharacter::APuzzlePlaftormerCharacter()
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
+		//	/ Game / UI / Menus / WBP_MainMenu.WBP_MainMenu
+	ConstructorHelpers::FClassFinder<UUserWidget> IngameMenuBPClass(TEXT("/Game/UI/Menus/WBP_InGameMenu"));
+	if (!ensure(IngameMenuBPClass.Class != nullptr)) return;
+
+	IngameMenuClass = IngameMenuBPClass.Class;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -56,6 +66,7 @@ void APuzzlePlaftormerCharacter::SetupPlayerInputComponent(class UInputComponent
 	check(PlayerInputComponent);
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+	PlayerInputComponent->BindAction("OpenMenu", IE_Pressed, this, &APuzzlePlaftormerCharacter::OpenMenu);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &APuzzlePlaftormerCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &APuzzlePlaftormerCharacter::MoveRight);
@@ -80,6 +91,18 @@ void APuzzlePlaftormerCharacter::SetupPlayerInputComponent(class UInputComponent
 void APuzzlePlaftormerCharacter::OnResetVR()
 {
 	UHeadMountedDisplayFunctionLibrary::ResetOrientationAndPosition();
+}
+
+void APuzzlePlaftormerCharacter::OpenMenu()
+{
+	APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	if (!ensure(IngameMenuClass != nullptr)) return;
+	IngameMenu = CreateWidget<UInGameMenu>(PC, IngameMenuClass);
+	if (!ensure(IngameMenu != nullptr)) return;
+	UPuzzlePlatformerGameInstance* GI = Cast<UPuzzlePlatformerGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	if (!ensure(GI != nullptr)) return;
+	IngameMenu->SetupMenu();
+	IngameMenu->SetMenuInterface(GI);
 }
 
 void APuzzlePlaftormerCharacter::TouchStarted(ETouchIndex::Type FingerIndex, FVector Location)

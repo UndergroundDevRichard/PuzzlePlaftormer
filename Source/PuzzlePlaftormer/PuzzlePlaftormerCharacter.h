@@ -29,10 +29,16 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
 	float BaseLookUpRate;
 
+
+	TSubclassOf<class UUserWidget> IngameMenuClass;
+	class UInGameMenu* IngameMenu;
+
 protected:
 
 	/** Resets HMD orientation in VR. */
 	void OnResetVR();
+
+	void OpenMenu();
 
 	/** Called for forwards/backward input */
 	void MoveForward(float Value);

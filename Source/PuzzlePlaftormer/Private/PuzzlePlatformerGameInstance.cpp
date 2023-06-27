@@ -7,6 +7,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Blueprint/UserWidget.h"
+#include "UI/MainMenu.h"
 
 UPuzzlePlatformerGameInstance::UPuzzlePlatformerGameInstance(const FObjectInitializer & ObjectInitializer)
 {
@@ -27,8 +28,23 @@ void UPuzzlePlatformerGameInstance::Init()
 	UE_LOG(LogTemp, Log, TEXT("Found class %s"), *MenuClass->GetName());
 }
 
+void UPuzzlePlatformerGameInstance::LoadMenu()
+{
+	if(!ensure (MenuClass != nullptr)) return;
+	Menu = CreateWidget<UMainMenu>(this, MenuClass);
+	if (!ensure(Menu != nullptr)) return;
+
+	Menu -> SetupMenu();
+	Menu->SetMenuInterface(this);
+}
+
+
 void UPuzzlePlatformerGameInstance::Host()
 {
+	if (Menu != nullptr)
+	{
+		Menu->TeardownMenu();
+	}
 	UEngine* Engine = GetEngine();
 	if (!ensure(Engine != nullptr)) return;
 
@@ -39,10 +55,15 @@ void UPuzzlePlatformerGameInstance::Host()
 
 	World->ServerTravel("/Game/Maps/L_BaseLevel?listen");
 
-}
+} 
 
 void UPuzzlePlatformerGameInstance::Join(const FString& IPAddress)
 {
+	if (Menu != nullptr)
+	{
+		Menu->TeardownMenu();
+	}
+
 	UEngine* Engine = GetEngine();
 	if (!ensure(Engine != nullptr)) return;
 
@@ -53,3 +74,11 @@ void UPuzzlePlatformerGameInstance::Join(const FString& IPAddress)
 	PC->ClientTravel(IPAddress, TRAVEL_Absolute, true);
 
 }
+
+void UPuzzlePlatformerGameInstance::ReturnToMenu()
+{
+	APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	if (!ensure(PC != nullptr)) return;
+	PC->ClientTravel("/Game/Maps/FrontEnd/L_MainMenu", TRAVEL_Absolute, true);
+}
+
