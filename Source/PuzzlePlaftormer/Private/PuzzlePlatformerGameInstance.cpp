@@ -2,12 +2,13 @@
 
 #include "PuzzlePlatformerGameInstance.h"
 #include "PlatformTrigger.h"
-
+#include "OnlineSubsystem.h"
 #include "Engine/Engine.h"
 #include "Kismet/GameplayStatics.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Blueprint/UserWidget.h"
 #include "UI/MainMenu.h"
+
 
 UPuzzlePlatformerGameInstance::UPuzzlePlatformerGameInstance(const FObjectInitializer & ObjectInitializer)
 {
@@ -18,6 +19,7 @@ UPuzzlePlatformerGameInstance::UPuzzlePlatformerGameInstance(const FObjectInitia
 	if (!ensure(MenuBPClass.Class != nullptr)) return;
 
 	MenuClass = MenuBPClass.Class;
+
 }
 
 void UPuzzlePlatformerGameInstance::Init()
@@ -25,10 +27,20 @@ void UPuzzlePlatformerGameInstance::Init()
 	Super::Init();
 	UE_LOG(LogTemp, Log, TEXT("Init Function"));
 
-	UE_LOG(LogTemp, Log, TEXT("Found class %s"), *MenuClass->GetName());
+	//UE_LOG(LogTemp, Log, TEXT("Found class %s"), *MenuClass->GetName());
+
+	IOnlineSubsystem* OSubSystem = IOnlineSubsystem::Get();
+	if (OSubSystem != nullptr)
+	{
+		UE_LOG(LogTemp, Log, TEXT("Found class %s"), **OSubSystem->GetSubsystemName().ToString());
+	}
+	else
+	{
+		UE_LOG(LogTemp, Log, TEXT("No Subsystem"));
+	}
 }
 
-void UPuzzlePlatformerGameInstance::LoadMenu()
+void UPuzzlePlatformerGameInstance::LoadMenuWidget()
 {
 	if(!ensure (MenuClass != nullptr)) return;
 	Menu = CreateWidget<UMainMenu>(this, MenuClass);

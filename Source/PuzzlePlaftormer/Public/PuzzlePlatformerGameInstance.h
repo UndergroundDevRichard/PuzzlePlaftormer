@@ -26,7 +26,7 @@ public:
 	virtual void Init();
 
 	UFUNCTION(exec, BlueprintCallable)
-	void LoadMenu();
+	void LoadMenuWidget();
 	
 
 	UFUNCTION(exec)
@@ -43,6 +43,8 @@ private:
 	TSubclassOf<class UUserWidget> MenuClass;
 	//UPROPERTY()
 	//class UUserWidget* MenuWidget;
+
+	//class IOnlineSubsystem* OSubSystem;
 
 	class UMainMenu* Menu;
 
